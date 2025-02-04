@@ -641,7 +641,7 @@ namespace ofxImGui
         }
 
         // Update cached variables
-        updateDockingVp();
+        //updateDockingVp();
         // Update height
         ImGuiWindow* menuWin = ImGui::FindWindowByID(ImGui::GetIDWithSeed("##MainMenuBar", nullptr, 0));
         menuHeight = (menuWin && !menuWin->Hidden && menuWin->Active) ? ImGui::GetFrameHeight() : 0;
