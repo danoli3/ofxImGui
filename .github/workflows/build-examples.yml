@@ -38,7 +38,8 @@ jobs:
           path: of/addons/ofxImGui
 
       - name: ofxImGuizmo
-        run: git clone --depth 1 https://github.com/nariakiiwatani/ofxImGuizmo "$OF/addons/ofxImGuizmo"
+        # its ImGuizmo submodule has an SSH URL
+        run: git -c url."https://github.com/".insteadOf="git@github.com:" clone --depth 1 --recursive --shallow-submodules https://github.com/nariakiiwatani/ofxImGuizmo "$OF/addons/ofxImGuizmo"
 
       - name: Dependencies (Linux)
         if: runner.os == 'Linux'
