@@ -261,13 +261,20 @@ namespace ofxImGui
 		// FontGlobalScale upscales the already-rasterised atlas; for sharper results
 		// rebuild fonts at (size * scale) instead. ScaleAllSizes keeps padding/rounding
 		// proportional. Both are no-ops when xscale == 1 (non-HiDPI displays).
+		// Skipped when the framebuffer is larger than the window (macOS Retina): there the
+		// window is measured in points and DisplayFramebufferScale already renders at the
+		// display's resolution, so scaling again would double everything.
 #ifdef OFXIMGUI_BACKEND_GLFW
-		{
+		if (autoContentScale) {
 			GLFWwindow* glfwWin = (GLFWwindow*)_ofWindow->getWindowContext();
 			if (glfwWin) {
 				float xs = 1.f, ys = 1.f;
 				glfwGetWindowContentScale(glfwWin, &xs, &ys);
-				if (xs > 1.f) {
+				int windowWidth = 0, windowHeight = 0, framebufferWidth = 0, framebufferHeight = 0;
+				glfwGetWindowSize(glfwWin, &windowWidth, &windowHeight);
+				glfwGetFramebufferSize(glfwWin, &framebufferWidth, &framebufferHeight);
+				bool framebufferScales = windowWidth > 0 && framebufferWidth > windowWidth;
+				if (xs > 1.f && !framebufferScales) {
 					io.FontGlobalScale = xs;
 					ImGui::GetStyle().ScaleAllSizes(xs);
 				}
@@ -276,6 +283,12 @@ namespace ofxImGui
 #endif
 
 		return SetupState::Master;
+	}
+
+	//--------------------------------------------------------------
+	void Gui::setAutoContentScale(bool enabled)
+	{
+		autoContentScale = enabled;
 	}
 
 	//--------------------------------------------------------------

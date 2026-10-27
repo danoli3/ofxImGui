@@ -166,6 +166,10 @@ namespace ofxImGui
 		// setTheme takes ownership of passed instance
 		void setTheme(BaseTheme* theme);
 
+		// Scale fonts and sizes by the screen's content scale (HiDPI / 4K) in setup(). On by default,
+		// call before setup(). Turn it off when the app sizes its own fonts for the display.
+		void setAutoContentScale(bool enabled);
+
 		// Prefer storing your own textures and forwarding textureids !
 		// Provided for legacy compatibility and ensure textures are in the correct format
 		GLuint loadImage(ofImage& image);
@@ -226,6 +230,7 @@ namespace ofxImGui
         // If you're dealing with dynamic libraries, you might need to pass this over to another ImGui instance.
 		ofxImGuiContext* context = nullptr; // Short-hand value, same as stored in the map, faster access
 		bool isContextOwned = false; // Copy of context, set when it needs destruction
+		bool autoContentScale = true; // setAutoContentScale()
 
 		//static LinkedList<ofAppBaseWindow*, ofxImGuiContext> imguiContexts; // Window/MasterContext map
 		static std::unordered_map<ofAppBaseWindow*, ofxImGuiContext> imguiContexts; // Window/MasterContext map
