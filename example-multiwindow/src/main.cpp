@@ -1,10 +1,23 @@
 #include "ofMain.h"
 #include "ofApp.h"
+#ifndef TARGET_EMSCRIPTEN
 #include "ofAppGLFWWindow.h"
+#endif
 
 #pragma message "Warning, ofxImGui in multiple ofAppBaseWindows is in testing phase. Proceed with caution !"
 
 //========================================================================
+#ifdef TARGET_EMSCRIPTEN
+// A browser has a single canvas and no GLFW window class: run one window.
+int main( ){
+    ofGLESWindowSettings settings;
+    settings.setSize(900, 600);
+    settings.setGLESVersion(3);
+    auto window = ofCreateWindow(settings);
+    ofRunApp(window, std::make_shared<ofApp>());
+    return ofRunMainLoop();
+}
+#else
 int main( ){
     ofSetLogLevel( OF_LOG_VERBOSE );
 
@@ -60,3 +73,4 @@ int main( ){
 
 	return ofRunMainLoop();
 }
+#endif
